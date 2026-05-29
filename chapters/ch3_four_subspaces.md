@@ -13,17 +13,6 @@ The dimensions of these spaces are governed by the **Rank-Nullity Theorem**, ens
 
 Let $A$ be an $m \times n$ matrix with rank $r$ (where $r \le \min(m, n)$).
 
-```
-          INPUT SPACE R^n                           OUTPUT SPACE R^m
-   ┌───────────────────────────┐             ┌───────────────────────────┐
-   │  Row Space C(A^T)         │             │  Column Space C(A)        │
-   │  Dimension = r            │ ───[Ax]───► │  Dimension = r            │
-   ├───────────────────────────┤             ├───────────────────────────┤
-   │  Nullspace N(A)           │             │  Left Nullspace N(A^T)    │
-   │  Dimension = n - r        │ ───[Ax=0]─► │  Dimension = m - r        │
-   └───────────────────────────┘             └───────────────────────────┘
-```
-
 ### 1. The Column Space $C(A)$
 *   **Definition**: The set of all linear combinations of the columns of $A$. It resides in $\mathbb{R}^m$.
 *   **Dimension**: $\dim C(A) = r$
@@ -36,16 +25,58 @@ Let $A$ be an $m \times n$ matrix with rank $r$ (where $r \le \min(m, n)$).
 ### 3. The Row Space $C(A^T)$
 *   **Definition**: The column space of $A^T$; the set of all linear combinations of the rows of $A$. It resides in $\mathbb{R}^n$.
 *   **Dimension**: $\dim C(A^T) = r$
-*   *Theorem:* The column space and the row space always have the exact same dimension, equal to the rank $r$, regardless of whether the matrix is tall, wide, or square.
 
 ### 4. The Left Nullspace $N(A^T)$
 *   **Definition**: The nullspace of $A^T$; the set of all vectors $y \in \mathbb{R}^m$ such that $A^T y = \mathbf{0}$ (or $y^T A = \mathbf{0}^T$). It resides in $\mathbb{R}^m$.
 *   **Dimension**: $\dim N(A^T) = m - r$
 
-### 5. The Dimension Theorem (Rank-Nullity)
-The dimensions of the input subspaces must sum to the total number of inputs:
+---
 
-$$\text{Rank} + \text{Nullity} = n \implies r + (n - r) = n$$
+### 5. The Fundamental Theorem of Linear Algebra (Parts I & II)
+Gilbert Strang's formulation of the fundamental theorem is divided into two parts:
+
+*   **Part I (Dimensions)**: 
+    *   $\dim C(A) = r$
+    *   $\dim C(A^T) = r$
+    *   $\dim N(A) = n - r$
+    *   $\dim N(A^T) = m - r$
+*   **Part II (Orthogonal Complements)**: 
+    The subspaces are orthogonal complements in their respective spaces:
+    *   In $\mathbb{R}^n$, the nullspace is the orthogonal complement of the row space:
+        $$N(A) = C(A^T)^\perp \implies V = C(A^T) \oplus N(A)$$
+    *   In $\mathbb{R}^m$, the left nullspace is the orthogonal complement of the column space:
+        $$N(A^T) = C(A)^\perp \implies W = C(A) \oplus N(A^T)$$
+
+---
+
+## 🗺️ The Complete Geometric Map of Matrix Mappings
+
+Every vector $x \in \mathbb{R}^n$ can be decomposed into an orthogonal sum of a row-space vector $x_{row}$ and a nullspace vector $x_{null}$:
+
+$$x = x_{row} + x_{null} \quad \text{where} \quad x_{row} \in C(A^T), \ x_{null} \in N(A)$$
+
+When we multiply by $A$, the nullspace component is annihilated:
+
+$$Ax = A(x_{row} + x_{null}) = A x_{row} + A x_{null} = A x_{row} + \mathbf{0} = A x_{row}$$
+
+This leads to a beautiful geometric mapping:
+
+```
+        INPUT SPACE R^n                           OUTPUT SPACE R^m
+  ┌───────────────────────────┐             ┌───────────────────────────┐
+  │  Row Space C(A^T)         │             │  Column Space C(A)        │
+  │  (Dimension = r)          │             │  (Dimension = r)          │
+  │                           │ ──[One-to]──►                           │
+  │        [x_row]  ──────────┼───[One]───► │        [A * x_row]        │
+  ├───────────────────────────┤             ├───────────────────────────┤
+  │  Nullspace N(A)           │             │  Left Nullspace N(A^T)    │
+  │  (Dimension = n - r)      │             │  (Dimension = m - r)      │
+  │                           │             │                           │
+  │        [x_null] ──────────┼───[Maps]──► │            [0]            │
+  └───────────────────────────┘             └───────────────────────────┘
+```
+
+*   **One-to-One Mapping**: The matrix $A$ acts as a **perfect, invertible, one-to-one mapping** from the row space $C(A^T)$ to the column space $C(A)$. If $x_1$ and $x_2$ are different vectors in the row space, then $Ax_1$ and $Ax_2$ are guaranteed to be different vectors in the column space.
 
 ---
 

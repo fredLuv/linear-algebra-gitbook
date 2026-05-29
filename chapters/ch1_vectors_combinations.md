@@ -5,7 +5,7 @@ The starting point of linear algebra is the **vector**. Gilbert Strang emphasize
 
 $$\mathbf{w} = c\mathbf{u} + d\mathbf{v}$$
 
-Geometrically, the set of all possible linear combinations of a group of vectors defines their **Span**. If these vectors reside in a space and satisfy ten strict closure and algebraic properties, they form a **Vector Space**. The inner product (or **dot product**) introduces the geometric concepts of **length, distance, and angle** to vector spaces, providing the mathematical foundation for measuring similarity and projection.
+Geometrically, the set of all possible linear combinations of a group of vectors defines their **Span**. If these vectors reside in a space and satisfy ten strict closure and algebraic properties, they form a **Vector Space**. The inner product (or **dot product**) introduces the geometric concepts of **length, distance, and angle** to vector spaces, providing the mathematical foundation for measuring similarity, projection, and distance metrics.
 
 ---
 
@@ -25,63 +25,63 @@ A real vector space $V$ is a set of elements (vectors) closed under addition and
 9.  **Associativity of Scalar Multiplication**: $c(d\mathbf{u}) = (cd)\mathbf{u}$
 10. **Scalar Identity**: $1\mathbf{u} = \mathbf{u}$
 
-### 2. The Dot Product, Lengths, and Angles
-For two vectors $\mathbf{u}, \mathbf{v} \in \mathbb{R}^n$, the inner product (dot product) is defined as:
+---
 
-$$\mathbf{u} \cdot \mathbf{v} = \mathbf{u}^T \mathbf{v} = \sum_{i=1}^{n} u_i v_i$$
+### 2. Inner Product Spaces
+An inner product space is a vector space $V$ equipped with a map $\langle \mathbf{u}, \mathbf{v} \rangle : V \times V \to \mathbb{R}$ that satisfies the following four axioms for all $\mathbf{u}, \mathbf{v}, \mathbf{w} \in V$ and scalars $c \in \mathbb{R}$:
 
-*   **Length (Euclidean $L_2$ Norm)**: The length of a vector $\mathbf{u}$, denoted as $\|\mathbf{u}\|$, is:
-    $$\|\mathbf{u}\| = \sqrt{\mathbf{u} \cdot \mathbf{u}} = \sqrt{\sum_{i=1}^{n} u_i^2}$$
+1.  **Symmetry**: $\langle \mathbf{u}, \mathbf{v} \rangle = \langle \mathbf{v}, \mathbf{u} \rangle$
+2.  **Linearity**: $\langle c\mathbf{u} + \mathbf{v}, \mathbf{w} \rangle = c\langle \mathbf{u}, \mathbf{w} \rangle + \langle \mathbf{v}, \mathbf{w} \rangle$
+3.  **Positive Definiteness**: $\langle \mathbf{u}, \mathbf{u} \rangle \ge 0$, and $\langle \mathbf{u}, \mathbf{u} \rangle = 0 \iff \mathbf{u} = \mathbf{0}$
+
+*   **The Standard Euclidean Dot Product**: In $\mathbb{R}^n$, the standard inner product is:
+    $$\mathbf{u} \cdot \mathbf{v} = \mathbf{u}^T \mathbf{v} = \sum_{i=1}^{n} u_i v_i$$
 *   **Angle Between Vectors**: The cosine of the angle $\theta$ between two non-zero vectors is:
-    $$\cos\theta = \frac{\mathbf{u} \cdot \mathbf{v}}{\|\mathbf{u}\| \|\mathbf{v}\|}$$
-    *   If $\mathbf{u} \cdot \mathbf{v} = 0$, then $\cos\theta = 0$, meaning the vectors are **orthogonal** ($\theta = 90^\circ$).
-
-### 3. Core Inequalities
-*   **Cauchy-Schwarz Inequality**: The absolute value of the dot product is bounded by the product of their lengths:
-    $$|\mathbf{u} \cdot \mathbf{v}| \le \|\mathbf{u}\| \|\mathbf{v}\|$$
-*   **Triangle Inequality**: The length of the sum of two vectors is bounded by the sum of their individual lengths:
-    $$\|\mathbf{u} + \mathbf{v}\| \le \|\mathbf{u}\| + \|\mathbf{v}\|$$
+    $$\cos\theta = \frac{\langle \mathbf{u}, \mathbf{v} \rangle}{\|\mathbf{u}\| \|\mathbf{v}\|}$$
+    *   If $\langle \mathbf{u}, \mathbf{v} \rangle = 0$, then $\cos\theta = 0$, meaning the vectors are **orthogonal** ($\theta = 90^\circ$).
 
 ---
 
-## ✍️ Step-by-Step Worked Example: Proving Linear Independence
+### 3. Vector Norms: $L_1$ and $L_2$ Space
+A norm $\|\mathbf{x}\|$ is a function that assigns a strictly positive length to a vector. In quantitative and data science models, we focus on the $L_p$ family of norms:
 
-### Problem:
-Determine if the following three vectors in $\mathbb{R}^3$ are **linearly independent**:
+$$\|\mathbf{x}\|_p = \left( \sum_{i=1}^{n} |x_i|^p \right)^{1/p}$$
 
-$$\mathbf{v}_1 = \begin{bmatrix} 1 \\ 2 \\ 1 \end{bmatrix}, \quad \mathbf{v}_2 = \begin{bmatrix} 2 \\ 9 \\ 0 \end{bmatrix}, \quad \mathbf{v}_3 = \begin{bmatrix} 3 \\ 3 \\ 4 \end{bmatrix}$$
+*   **$L_2$ Norm (Euclidean Norm)**: Represents the direct straight-line distance:
+    $$\|\mathbf{x}\|_2 = \sqrt{\mathbf{x}^T \mathbf{x}} = \sqrt{\sum_{i=1}^{n} x_i^2}$$
+*   **$L_1$ Norm (Taxicab / Manhattan Norm)**: Represents the sum of absolute values:
+    $$\|\mathbf{x}\|_1 = \sum_{i=1}^{n} |x_i|$$
+*   **$L_\infty$ Norm (Max Norm)**: Represents the maximum absolute component:
+    $$\|\mathbf{x}\|_\infty = \max_i |x_i|$$
 
-### Mathematical Setup:
-By definition, vectors are linearly independent if the only scalar combination that yields the zero vector is the trivial solution ($c_1 = c_2 = c_3 = 0$):
+---
 
-$$c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2 + c_3 \mathbf{v}_3 = \mathbf{0}$$
+## ✍️ Step-by-Step Worked Proof: The Cauchy-Schwarz Inequality
 
-This can be written as a matrix equation $A\mathbf{c} = \mathbf{0}$:
+### Theorem:
+For any vectors $\mathbf{u}, \mathbf{v}$ in an inner product space:
 
-$$\begin{bmatrix} 1 & 2 & 3 \\ 2 & 9 & 3 \\ 1 & 0 & 4 \end{bmatrix} \begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}$$
+$$|\langle \mathbf{u}, \mathbf{v} \rangle| \le \|\mathbf{u}\| \|\mathbf{v}\|$$
 
-### Step-by-Step Row Elimination:
-We apply Gaussian row elimination to the coefficient matrix $A$:
+### Step-by-Step Algebraic Proof:
+1.  If $\mathbf{v} = \mathbf{0}$, then both sides equal $0$, and the inequality holds trivially. Assume $\mathbf{v} \neq \mathbf{0}$.
+2.  Consider a scalar $t \in \mathbb{R}$. By the positive definiteness axiom of inner products, the length of the vector $t\mathbf{u} + \mathbf{v}$ squared must be non-negative for any value of $t$:
+    $$\langle t\mathbf{u} + \mathbf{v}, t\mathbf{u} + \mathbf{v} \rangle \ge 0$$
+3.  Expand this using the linearity and symmetry axioms:
+    $$\langle t\mathbf{u}, t\mathbf{u} \rangle + 2\langle t\mathbf{u}, \mathbf{v} \rangle + \langle \mathbf{v}, \mathbf{v} \rangle \ge 0$$
+    $$t^2 \langle \mathbf{u}, \mathbf{u} \rangle + 2t \langle \mathbf{u}, \mathbf{v} \rangle + \langle \mathbf{v}, \mathbf{v} \rangle \ge 0$$
+4.  This is a quadratic polynomial in $t$ of the form $a t^2 + b t + c \ge 0$, where:
+    $$a = \|\mathbf{u}\|^2, \quad b = 2\langle \mathbf{u}, \mathbf{v} \rangle, \quad c = \|\mathbf{v}\|^2$$
+5.  For a quadratic polynomial $at^2 + bt + c$ to remain non-negative ($\ge 0$) for all real values of $t$, it must have at most one real root. Mathematically, its **discriminant** must be less than or equal to zero:
+    $$\Delta = b^2 - 4ac \le 0$$
+6.  Substitute the expressions for $a$, $b$, and $c$:
+    $$(2\langle \mathbf{u}, \mathbf{v} \rangle)^2 - 4 \|\mathbf{u}\|^2 \|\mathbf{v}\|^2 \le 0$$
+    $$4\langle \mathbf{u}, \mathbf{v} \rangle^2 - 4 \|\mathbf{u}\|^2 \|\mathbf{v}\|^2 \le 0$$
+    $$\langle \mathbf{u}, \mathbf{v} \rangle^2 \le \|\mathbf{u}\|^2 \|\mathbf{v}\|^2$$
+7.  Taking the square root of both sides yields the final inequality:
+    $$|\langle \mathbf{u}, \mathbf{v} \rangle| \le \|\mathbf{u}\| \|\mathbf{v}\|$$
 
-$$\begin{bmatrix} 1 & 2 & 3 \\ 2 & 9 & 3 \\ 1 & 0 & 4 \end{bmatrix}$$
-
-1.  Subtract $2$ times Row 1 from Row 2 ($R_2 \leftarrow R_2 - 2R_1$):
-    $$\begin{bmatrix} 1 & 2 & 3 \\ 0 & 5 & -3 \\ 1 & 0 & 4 \end{bmatrix}$$
-2.  Subtract Row 1 from Row 3 ($R_3 \leftarrow R_3 - R_1$):
-    $$\begin{bmatrix} 1 & 2 & 3 \\ 0 & 5 & -3 \\ 0 & -2 & 1 \end{bmatrix}$$
-3.  Eliminate the second entry in Row 3 by adding $\frac{2}{5}$ of Row 2 to Row 3 ($R_3 \leftarrow R_3 + \frac{2}{5}R_2$):
-    $$\begin{bmatrix} 1 & 2 & 3 \\ 0 & 5 & -3 \\ 0 & 0 & 1 - \frac{6}{5} \end{bmatrix} = \begin{bmatrix} 1 & 2 & 3 \\ 0 & 5 & -3 \\ 0 & 0 & -1/5 \end{bmatrix}$$
-
-### Analysis of Pivots:
-The matrix is now in upper triangular form. The diagonal entries (pivots) are:
-*   Pivot 1 = $1 \neq 0$
-*   Pivot 2 = $5 \neq 0$
-*   Pivot 3 = $-1/5 \neq 0$
-
-Since we have **three non-zero pivots** for a $3 \times 3$ matrix, the matrix $A$ is full rank (invertible). The only solution to $A\mathbf{c} = \mathbf{0}$ is the trivial solution $\mathbf{c} = \mathbf{0}$ ($c_1 = c_2 = c_3 = 0$).
-
-### Conclusion:
-The vectors $\mathbf{v}_1$, $\mathbf{v}_2$, and $\mathbf{v}_3$ are **linearly independent**.
+The theorem is proved.
 
 ---
 
@@ -96,9 +96,12 @@ $$\mathbf{r}_p = \sum_{i=1}^{n} w_i \mathbf{r}_i$$
 
 *   The allocation weights are constrained such that $\sum_{i=1}^{n} w_i = 1$. The set of all possible long-only portfolios ($w_i \ge 0$) forms a convex hull within the span of the asset vectors.
 
-### 2. Cosine Similarity in NLP & Recommendation Engines
-In data science, text documents or user profiles are represented as high-dimensional sparse vectors of word frequencies or ratings ($\mathbf{u}, \mathbf{v}$). The similarity between two elements is measured by the **inner product** normalized by their Euclidean lengths:
+### 2. Norm Penalties in Regularization: Ridge vs. Lasso Regression
+In statistical modeling and machine learning, we solve regression models by minimizing a loss function. To prevent overfitting, we add a norm-based penalty to the regression coefficients vector $\boldsymbol{\beta} \in \mathbb{R}^n$:
 
-$$\text{Cosine Similarity}(\mathbf{u}, \mathbf{v}) = \frac{\mathbf{u}^T \mathbf{v}}{\|\mathbf{u}\| \|\mathbf{v}\|} = \cos\theta$$
-
-*   **Bounded Metrics**: By the Cauchy-Schwarz inequality, this similarity metric is bounded between $-1$ and $+1$. For non-negative frequency vectors, it lies between $0$ (completely orthogonal, sharing no terms) and $1$ (collinear, identical proportions).
+*   **Ridge Regression ($L_2$ Regularization)**:
+    $$\min_{\boldsymbol{\beta}} \|y - X\boldsymbol{\beta}\|_2^2 + \alpha \|\boldsymbol{\beta}\|_2^2$$
+    *   *Mathematical Behavior:* The quadratic $L_2$ penalty $\|\boldsymbol{\beta}\|_2^2 = \sum \beta_i^2$ keeps the weights small but non-zero. It shrinks coefficients smoothly, which is ideal for managing high correlation (multicollinearity) in features.
+*   **Lasso Regression ($L_1$ Regularization)**:
+    $$\min_{\boldsymbol{\beta}} \|y - X\boldsymbol{\beta}\|_2^2 + \alpha \|\boldsymbol{\beta}\|_1$$
+    *   *Mathematical Behavior:* The absolute $L_1$ penalty $\|\boldsymbol{\beta}\|_1 = \sum |\beta_i|$ features sharp corners (is non-differentiable at $\beta_i = 0$). This forces negligible features to have coefficients of **exactly zero**, performing automated **feature selection** and yielding sparse models.

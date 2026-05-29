@@ -22,29 +22,25 @@ The four fundamental subspaces are perpendicular in pairs:
 *   **In $\mathbb{R}^m$**: The column space is the orthogonal complement of the left nullspace:
     $$C(A) = N(A^T)^\perp \quad \text{and} \quad C(A) \perp N(A^T)$$
 
-### 2. Projection Matrices
-To project a vector $b$ onto a subspace spanned by the columns of a full-rank matrix $A$:
+---
 
-$$P = A(A^T A)^{-1} A^T$$
+### 2. Projection Operators & The Hat Matrix ($H$)
+To project a vector $b \in \mathbb{R}^m$ onto the column space $C(A)$, we multiply $b$ by the projection **Hat Matrix ($H$)**, so named because it puts a "hat" on the target estimator ($p = \hat{b} = Hb$):
 
-*   **Properties of Projection Matrices**:
-    1.  **Symmetric**: $P^T = P$
-    2.  **Idempotent**: $P^2 = P$ (projecting a second time does not change the position)
+$$H = A(A^T A)^{-1} A^T$$
+
+*   **Properties of the Hat Matrix**:
+    1.  **Symmetric**: $H^T = H$
+    2.  **Idempotent**: $H^2 = H$ (projecting a projected vector does not change its position)
+    3.  **Trace**: The trace (sum of diagonal entries) of the projection matrix equals the rank of the matrix $A$, which represents the dimension of the subspace we are projecting onto:
+        $$\text{tr}(H) = \text{rank}(A) = n \quad (\text{for a full column-rank matrix } A)$$
+    4.  **Complement Projection**: The matrix $I - H$ projects onto the left nullspace $N(A^T)$:
+        $$\mathbf{e} = (I - H)b$$
+
+---
 
 ### 3. The Algebraic Derivation of OLS
 When $Ax = b$ has no solution, we seek $\hat{x}$ that minimizes the squared Euclidean norm of the error vector $\|\mathbf{e}\|^2 = \|b - Ax\|^2$.
-
-```
-              b
-             /|
-            / |
-           /  |  e = b - A*x_hat
-          /   |
-         /    | 
-        /     ▼
-       └───────► C(A)
-         A*x_hat
-```
 
 1.  The error vector $\mathbf{e}$ must be orthogonal to every column of $A$:
     $$\mathbf{a}_i^T (b - A\hat{x}) = 0 \quad \text{for all } i$$
@@ -53,15 +49,21 @@ When $Ax = b$ has no solution, we seek $\hat{x}$ that minimizes the squared Eucl
 3.  Expanding this yields the **Normal Equation**:
     $$A^T A \hat{x} = A^T b \implies \hat{x} = (A^T A)^{-1} A^T b$$
 
-### 4. Orthonormal Bases and the $A = QR$ Factorization
-A set of vectors $\mathbf{q}_1, \mathbf{q}_2, \dots, \mathbf{q}_n$ is **orthonormal** if they are mutually perpendicular and have unit length:
-$$\mathbf{q}_i^T \mathbf{q}_j = \begin{cases} 0 & \text{if } i \neq  j \\ 1 & \text{if } i = j \end{cases}$$
+---
 
-If $Q$ is a matrix with orthonormal columns, then $Q^T Q = I$. If we factor $A = QR$ (where $R$ is upper triangular):
-$$A^T A = (QR)^T (QR) = R^T Q^T Q R = R^T R$$
+### 4. Orthonormal Bases and Gram-Schmidt for 3 Vectors
+Let $\mathbf{a}, \mathbf{b}, \mathbf{c}$ be three linearly independent vectors. We transform them into an orthonormal basis $\mathbf{q}_1, \mathbf{q}_2, \mathbf{q}_3$ using Gram-Schmidt:
 
-The Normal Equation simplifies to:
-$$R^T R \hat{x} = (QR)^T b = R^T Q^T b \implies R \hat{x} = Q^T b$$
+1.  **First Vector**: Choose $\mathbf{a}$ as the base direction, and normalize it:
+    $$\mathbf{A} = \mathbf{a} \implies \mathbf{q}_1 = \frac{\mathbf{A}}{\|\mathbf{A}\|}$$
+2.  **Second Vector**: Subtract the projection of $\mathbf{b}$ along $\mathbf{q}_1$ from $\mathbf{b}$ to get the perpendicular component $\mathbf{B}$:
+    $$\mathbf{B} = \mathbf{b} - (\mathbf{b}^T \mathbf{q}_1) \mathbf{q}_1 \implies \mathbf{q}_2 = \frac{\mathbf{B}}{\|\mathbf{B}\|}$$
+3.  **Third Vector**: Subtract the projections of $\mathbf{c}$ along both $\mathbf{q}_1$ and $\mathbf{q}_2$ from $\mathbf{c}$ to get the perpendicular component $\mathbf{C}$:
+    $$\mathbf{C} = \mathbf{c} - (\mathbf{c}^T \mathbf{q}_1) \mathbf{q}_1 - (\mathbf{c}^T \mathbf{q}_2) \mathbf{q}_2 \implies \mathbf{q}_3 = \frac{\mathbf{C}}{\|\mathbf{C}\|}$$
+
+This Gram-Schmidt orthogonalization is compiled algebraically into the **$A = QR$ decomposition**, where $Q$ contains the orthonormal columns $\mathbf{q}_i$, and $R$ is an upper triangular matrix of coefficients:
+
+$$R = \begin{bmatrix} \mathbf{a}^T\mathbf{q}_1 & \mathbf{b}^T\mathbf{q}_1 & \mathbf{c}^T\mathbf{q}_1 \\ 0 & \mathbf{b}^T\mathbf{q}_2 & \mathbf{c}^T\mathbf{q}_2 \\ 0 & 0 & \mathbf{c}^T\mathbf{q}_3 \end{bmatrix}$$
 
 ---
 
@@ -83,8 +85,6 @@ This yields the matrix equation $Ax = b$ (where $x = \begin{bmatrix} C & D \end{
 
 $$\begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{bmatrix} \begin{bmatrix} C \\ D \end{bmatrix} = \begin{bmatrix} 6 \\ 0 \\ 0 \end{bmatrix}$$
 
-This system has no exact solution (the columns of $A$ cannot combine to yield $b$). We must solve via OLS.
-
 ---
 
 ### Step 2: Compute the Normal Equation Components
@@ -100,7 +100,7 @@ We set up the system:
 
 $$\begin{bmatrix} 3 & 3 \\ 3 & 5 \end{bmatrix} \begin{bmatrix} \hat{C} \\ \hat{D} \end{bmatrix} = \begin{bmatrix} 6 \\ 0 \end{bmatrix}$$
 
-Using elimination or matrix inversion:
+Using elimination:
 1.  Subtract Row 1 from Row 2 ($R_2 \leftarrow R_2 - R_1$):
     $$\begin{bmatrix} 3 & 3 \\ 0 & 2 \end{bmatrix} \begin{bmatrix} \hat{C} \\ \hat{D} \end{bmatrix} = \begin{bmatrix} 6 \\ -6 \end{bmatrix}$$
 2.  Solve for $\hat{D}$:
@@ -121,8 +121,6 @@ We verify that the error vector $\mathbf{e}$ is orthogonal to the column space $
 
 $$A^T \mathbf{e} = \begin{bmatrix} 1 & 1 & 1 \\ 0 & 1 & 2 \end{bmatrix} \begin{bmatrix} 1 \\ -2 \\ 1 \end{bmatrix} = \begin{bmatrix} 1 - 2 + 1 \\ 0 - 2 + 2 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
 
-The error vector is perfectly orthogonal to the column space.
-
 ---
 
 ## 📈 Quant & Data Science Bridging
@@ -137,4 +135,4 @@ To secure numerical stability in production algorithmic trading engines, we neve
 1.  Decompose $A = QR$. Since $Q$ is orthogonal, it preserves Euclidean lengths and does not amplify numerical errors.
 2.  Substitute into the OLS formulation:
     $$R \hat{x} = Q^T b$$
-3.  Because $R$ is upper triangular, we solve for $\hat{x}$ instantly using **back substitution** without any matrix inversion. This bypasses the inversion bottleneck, guarantees numerical stability, and protects the system from multicollinearity float truncation.
+3.  Because $R$ is upper triangular, we solve for $\hat{x}$ cleanly using **back substitution** without any matrix inversion. This bypasses the inversion bottleneck, guarantees numerical stability, and protects the system from multicollinearity float truncation.

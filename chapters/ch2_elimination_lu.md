@@ -5,7 +5,7 @@ To solve a linear system of equations $Ax = b$, row operations are applied to tr
 
 When these elimination steps are inverted and compiled, they naturally yield the **$A = LU$ factorization**, where $L$ is a lower-triangular matrix containing the row multipliers and $U$ is the final upper-triangular matrix containing the pivots. 
 
-Understanding $A = LU$ is essential because it decouples the matrix operations on $A$ from the vector $b$, allowing rapid solving of multiple systems using forward and back substitution.
+By factoring the pivots out of $U$, we can further refine this to the highly symmetric **$A = LDU$ decomposition**. Understanding these factorizations is essential because they decouple the matrix operations on $A$ from the vector $b$, allowing rapid solving of multiple systems using forward and back substitution.
 
 ---
 
@@ -23,66 +23,81 @@ Gilbert Strang highlights four distinct ways to view the matrix multiplication $
 *   **Outer Product View**: $C$ is the sum of $n$ rank-1 matrices formed by multiplying columns of $A$ by rows of $B$:
     $$C = \sum_{k=1}^{n} (\text{Col } k \text{ of } A) \times (\text{Row } k \text{ of } B)$$
 
-### 2. Elimination Matrices ($E_{ij}$)
-To subtract a multiplier $l_{ij}$ of Row $j$ from Row $i$, we multiply the target matrix by an elimination matrix $E_{ij}$. $E_{ij}$ is equal to the Identity matrix except for a non-zero element $-l_{ij}$ in the $(i, j)$ position.
-*   *Example:* To subtract $2$ times Row 1 from Row 2 in a $3 \times 3$ system, we use:
-    $$E_{21} = \begin{bmatrix} 1 & 0 & 0 \\ -2 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}$$
+---
 
-### 3. The $A = LU$ Factorization
-If no row exchanges are required during elimination, the sequence of row operations yields:
-$$(E_{32} E_{31} E_{21}) A = U$$
-
-Inverting this sequence to isolate $A$ yields:
-$$A = (E_{21}^{-1} E_{31}^{-1} E_{32}^{-1}) U = L U$$
-
-*   **No Multiplier Interference**: While the product of elimination matrices $(E_{32}E_{31}E_{21})$ contains complex mixed terms, the inverse product $L$ has a beautiful structure: the multipliers $l_{ij}$ go directly into their respective slots below the diagonal without any modification:
-    $$L = \begin{bmatrix} 1 & 0 & 0 \\ l_{21} & 1 & 0 \\ l_{31} & l_{32} & 1 \end{bmatrix}$$
-*   **Permutations**: If row exchanges are required to bypass a zero pivot, a permutation matrix $P$ is pre-multiplied, yielding:
-    $$PA = LU$$
+### 2. Elimination & Permutations
+*   **Elimination Matrices ($E_{ij}$)**: To subtract a multiplier $l_{ij}$ of Row $j$ from Row $i$, we multiply the target matrix by an elimination matrix $E_{ij}$. $E_{ij}$ is equal to the Identity matrix except for a non-zero element $-l_{ij}$ in the $(i, j)$ position.
+*   **Permutation Matrices ($P$)**: If a pivot slot contains a zero, we must swap rows. A Permutation Matrix $P$ is formed by reordering the rows of the Identity matrix.
+    *   **Orthonormal Properties**: Permutation matrices are orthogonal. Thus:
+        $$P^T P = I \implies P^T = P^{-1}$$
+    *   **Determinant**: The determinant of any permutation matrix is either $+1$ (for an even number of row swaps) or $-1$ (for an odd number of row swaps):
+        $$\det(P) = \pm 1$$
 
 ---
 
-## ✍️ Step-by-Step Worked Example: Factoring $A = LU$
+### 3. The $A = LU$ and $A = LDU$ Factorizations
+If no row exchanges are required during elimination:
+$$(E_{32} E_{31} E_{21}) A = U \implies A = L U$$
+
+*   **The Multiplier Matrix $L$**: The multipliers $l_{ij}$ go directly into their respective slots below the diagonal in $L$:
+    $$L = \begin{bmatrix} 1 & 0 & 0 \\ l_{21} & 1 & 0 \\ l_{31} & l_{32} & 1 \end{bmatrix}$$
+*   **Extracting Pivots ($A = LDU$)**: In $A = LU$, the upper triangular matrix $U$ has pivots $d_1, d_2, \dots, d_n$ on its diagonal. We can factor $U$ into a diagonal pivot matrix $D$ and a new upper triangular matrix with $1$s on the diagonal (let's call it $U_{new}$):
+    $$U = \begin{bmatrix} d_1 & u_{12} & u_{13} \\ 0 & d_2 & u_{23} \\ 0 & 0 & d_3 \end{bmatrix} = \begin{bmatrix} d_1 & 0 & 0 \\ 0 & d_2 & 0 \\ 0 & 0 & d_3 \end{bmatrix} \begin{bmatrix} 1 & u_{12}/d_1 & u_{13}/d_1 \\ 0 & 1 & u_{23}/d_2 \\ 0 & 0 & 1 \end{bmatrix} = D U_{new}$$
+    Substituting this back yields the symmetric **$LDU$ factorization**:
+    $$A = LDU$$
+
+---
+
+## ✍️ Step-by-Step Worked Example: Factoring $A = LDU$
 
 ### Problem:
-Perform a complete $A = LU$ factorization for the following $3 \times 3$ matrix:
+Given the matrix $A$:
 
-$$A = \begin{bmatrix} 2 & 1 & 1 \\ 4 & 5 & 0 \\ 2 & 7 & 8 \end{bmatrix}$$
+$$A = \begin{bmatrix} 2 & 4 & 2 \\ 4 & 11 & 1 \\ 2 & 1 & 15 \end{bmatrix}$$
 
-### Step 1: Eliminate $A_{21}$ (Row 2, Column 1)
-The first pivot is $d_1 = 2$. The multiplier to eliminate the value $4$ in the $(2, 1)$ slot is:
-$$l_{21} = \frac{4}{2} = 2$$
+1.  Compute the standard $A = LU$ factorization.
+2.  Extract the diagonal pivots to construct the symmetric $A = LDU$ decomposition.
 
-We subtract $2$ times Row 1 from Row 2 ($R_2 \leftarrow R_2 - 2R_1$):
-$$E_{21} A = \begin{bmatrix} 1 & 0 & 0 \\ -2 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} \begin{bmatrix} 2 & 1 & 1 \\ 4 & 5 & 0 \\ 2 & 7 & 8 \end{bmatrix} = \begin{bmatrix} 2 & 1 & 1 \\ 0 & 3 & -2 \\ 2 & 7 & 8 \end{bmatrix}$$
+---
 
-### Step 2: Eliminate $A_{31}$ (Row 3, Column 1)
-The multiplier to eliminate the value $2$ in the $(3, 1)$ slot is:
-$$l_{31} = \frac{2}{2} = 1$$
+### Step 1: Row Elimination to find $U$
+*   **Eliminate $A_{21}$**: The first pivot is $d_1 = 2$. Multiplier $l_{21} = \frac{4}{2} = 2$.
+    Subtract $2$ times Row 1 from Row 2 ($R_2 \leftarrow R_2 - 2R_1$):
+    $$\begin{bmatrix} 2 & 4 & 2 \\ 0 & 3 & -3 \\ 2 & 1 & 15 \end{bmatrix}$$
+*   **Eliminate $A_{31}$**: Multiplier $l_{31} = \frac{2}{2} = 1$.
+    Subtract Row 1 from Row 3 ($R_3 \leftarrow R_3 - R_1$):
+    $$\begin{bmatrix} 2 & 4 & 2 \\ 0 & 3 & -3 \\ 0 & -3 & 13 \end{bmatrix}$$
+*   **Eliminate $A_{32}$**: The second pivot is $d_2 = 3$. Multiplier $l_{32} = \frac{-3}{3} = -1$.
+    Subtract $-1$ times Row 2 from Row 3 ($R_3 \leftarrow R_3 + R_2$):
+    $$\begin{bmatrix} 2 & 4 & 2 \\ 0 & 3 & -3 \\ 0 & 0 & 10 \end{bmatrix} = U$$
 
-We subtract Row 1 from Row 3 ($R_3 \leftarrow R_3 - R_1$):
-$$E_{31} (E_{21} A) = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ -1 & 0 & 1 \end{bmatrix} \begin{bmatrix} 2 & 1 & 1 \\ 0 & 3 & -2 \\ 2 & 7 & 8 \end{bmatrix} = \begin{bmatrix} 2 & 1 & 1 \\ 0 & 3 & -2 \\ 0 & 6 & 7 \end{bmatrix}$$
+Our upper triangular matrix $U$ has pivots **$2$, $3$, and $10$** on the diagonal.
 
-### Step 3: Eliminate $A_{32}$ (Row 3, Column 2)
-The second pivot is $d_2 = 3$. The multiplier to eliminate the value $6$ in the $(3, 2)$ slot is:
-$$l_{32} = \frac{6}{3} = 2$$
+---
 
-We subtract $2$ times Row 2 from Row 3 ($R_3 \leftarrow R_3 - 2R_2$):
-$$E_{32} (E_{31} E_{21} A) = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & -2 & 1 \end{bmatrix} \begin{bmatrix} 2 & 1 & 1 \\ 0 & 3 & -2 \\ 0 & 6 & 7 \end{bmatrix} = \begin{bmatrix} 2 & 1 & 1 \\ 0 & 3 & -2 \\ 0 & 0 & 11 \end{bmatrix} = U$$
+### Step 2: Construct the Multiplier Matrix $L$
+Using the multipliers $l_{21} = 2$, $l_{31} = 1$, and $l_{32} = -1$:
 
-Our upper triangular matrix $U$ has three non-zero pivots: $2$, $3$, and $11$.
+$$L = \begin{bmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ 1 & -1 & 1 \end{bmatrix}$$
 
-### Step 4: Construct the Multiplier Matrix $L$
-We construct $L$ using our calculated multipliers $l_{21} = 2$, $l_{31} = 1$, and $l_{32} = 2$:
+---
 
-$$L = \begin{bmatrix} 1 & 0 & 0 \\ l_{21} & 1 & 0 \\ l_{31} & l_{32} & 1 \end{bmatrix} = \begin{bmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ 1 & 2 & 1 \end{bmatrix}$$
+### Step 3: Extract the Diagonal Pivots to Construct $D$ and $U_{new}$
+We build the diagonal pivot matrix $D$:
 
-### Step 5: Verification
-We verify that $LU = A$:
+$$D = \begin{bmatrix} 2 & 0 & 0 \\ 0 & 3 & 0 \\ 0 & 0 & 10 \end{bmatrix}$$
 
-$$LU = \begin{bmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ 1 & 2 & 1 \end{bmatrix} \begin{bmatrix} 2 & 1 & 1 \\ 0 & 3 & -2 \\ 0 & 0 & 11 \end{bmatrix} = \begin{bmatrix} (2) & (1) & (1) \\ (4) & (2+3) & (2-2) \\ (2) & (1+6) & (1-4+11) \end{bmatrix} = \begin{bmatrix} 2 & 1 & 1 \\ 4 & 5 & 0 \\ 2 & 7 & 8 \end{bmatrix} = A$$
+To find $U_{new}$, we divide each row of $U$ by its respective pivot:
+*   Row 1 of $U$ divided by $2$: $\begin{bmatrix} 1 & 2 & 1 \end{bmatrix}$
+*   Row 2 of $U$ divided by $3$: $\begin{bmatrix} 0 & 1 & -1 \end{bmatrix}$
+*   Row 3 of $U$ divided by $10$: $\begin{bmatrix} 0 & 0 & 1 \end{bmatrix}$
 
-The factorization is correct.
+This yields the normalized upper triangular matrix:
+
+$$U_{new} = \begin{bmatrix} 1 & 2 & 1 \\ 0 & 1 & -1 \\ 0 & 0 & 1 \end{bmatrix}$$
+
+*   *Note the Symmetry:* Because the original matrix $A$ was symmetric ($A^T = A$), our $LDU$ factorization exhibits beautiful mathematical symmetry: **$U_{new}$ is the exact transpose of $L$** ($U_{new} = L^T$).
+    $$A = L D L^T = \begin{bmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ 1 & -1 & 1 \end{bmatrix} \begin{bmatrix} 2 & 0 & 0 \\ 0 & 3 & 0 \\ 0 & 0 & 10 \end{bmatrix} \begin{bmatrix} 1 & 2 & 1 \\ 0 & 1 & -1 \\ 0 & 0 & 1 \end{bmatrix}$$
 
 ---
 
