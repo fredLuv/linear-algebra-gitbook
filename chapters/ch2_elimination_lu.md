@@ -15,13 +15,20 @@ By factoring the pivots out of $U$, we can further refine this to the highly sym
 Gilbert Strang highlights four distinct ways to view the matrix multiplication $C = AB$ (where $A$ is $m \times n$ and $B$ is $n \times p$):
 
 *   **Dot Product View (Standard)**: Each element $C_{ij}$ is the dot product of Row $i$ of $A$ and Column $j$ of $B$:
-    $$C_{ij} = \sum_{k=1}^{n} A_{ik} B_{kj}$$
+
+$$C_{ij} = \sum_{k=1}^{n} A_{ik} B_{kj}$$
+
 *   **Column View**: Columns of $C$ are linear combinations of the columns of $A$:
-    $$\mathbf{c}_j = A \mathbf{b}_j = b_{1j}\mathbf{a}_1 + b_{2j}\mathbf{a}_2 + \dots + b_{nj}\mathbf{a}_n$$
+
+$$\mathbf{c}_j = A \mathbf{b}_j = b_{1j}\mathbf{a}_1 + b_{2j}\mathbf{a}_2 + \dots + b_{nj}\mathbf{a}_n$$
+
 *   **Row View**: Rows of $C$ are linear combinations of the rows of $B$:
-    $$\mathbf{r}_{i, C} = \mathbf{a}_{i, A} B = a_{i1}\mathbf{r}_{1, B} + a_{i2}\mathbf{r}_{2, B} + \dots + a_{in}\mathbf{r}_{n, B}$$
+
+$$\mathbf{r}_{i, C} = \mathbf{a}_{i, A} B = a_{i1}\mathbf{r}_{1, B} + a_{i2}\mathbf{r}_{2, B} + \dots + a_{in}\mathbf{r}_{n, B}$$
+
 *   **Outer Product View**: $C$ is the sum of $n$ rank-1 matrices formed by multiplying columns of $A$ by rows of $B$:
-    $$C = \sum_{k=1}^{n} (\text{Col } k \text{ of } A) \times (\text{Row } k \text{ of } B)$$
+
+$$C = \sum_{k=1}^{n} (\text{Col } k \text{ of } A) \times (\text{Row } k \text{ of } B)$$
 
 ---
 
@@ -29,9 +36,12 @@ Gilbert Strang highlights four distinct ways to view the matrix multiplication $
 *   **Elimination Matrices ($E_{ij}$)**: To subtract a multiplier $l_{ij}$ of Row $j$ from Row $i$, we multiply the target matrix by an elimination matrix $E_{ij}$. $E_{ij}$ is equal to the Identity matrix except for a non-zero element $-l_{ij}$ in the $(i, j)$ position.
 *   **Permutation Matrices ($P$)**: If a pivot slot contains a zero, we must swap rows. A Permutation Matrix $P$ is formed by reordering the rows of the Identity matrix.
     *   **Orthonormal Properties**: Permutation matrices are orthogonal. Thus:
-        $$P^T P = I \implies P^T = P^{-1}$$
+
+$$P^T P = I \implies P^T = P^{-1}$$
+
     *   **Determinant**: The determinant of any permutation matrix is either $+1$ (for an even number of row swaps) or $-1$ (for an odd number of row swaps):
-        $$\det(P) = \pm 1$$
+
+$$\det(P) = \pm 1$$
 
 ---
 
@@ -40,11 +50,16 @@ If no row exchanges are required during elimination:
 $$(E_{32} E_{31} E_{21}) A = U \implies A = L U$$
 
 *   **The Multiplier Matrix $L$**: The multipliers $l_{ij}$ go directly into their respective slots below the diagonal in $L$:
-    $$L = \begin{bmatrix} 1 & 0 & 0 \\ l_{21} & 1 & 0 \\ l_{31} & l_{32} & 1 \end{bmatrix}$$
+
+$$L = \begin{bmatrix} 1 & 0 & 0 \\ l_{21} & 1 & 0 \\ l_{31} & l_{32} & 1 \end{bmatrix}$$
+
 *   **Extracting Pivots ($A = LDU$)**: In $A = LU$, the upper triangular matrix $U$ has pivots $d_1, d_2, \dots, d_n$ on its diagonal. We can factor $U$ into a diagonal pivot matrix $D$ and a new upper triangular matrix with $1$s on the diagonal (let's call it $U_{new}$):
-    $$U = \begin{bmatrix} d_1 & u_{12} & u_{13} \\ 0 & d_2 & u_{23} \\ 0 & 0 & d_3 \end{bmatrix} = \begin{bmatrix} d_1 & 0 & 0 \\ 0 & d_2 & 0 \\ 0 & 0 & d_3 \end{bmatrix} \begin{bmatrix} 1 & u_{12}/d_1 & u_{13}/d_1 \\ 0 & 1 & u_{23}/d_2 \\ 0 & 0 & 1 \end{bmatrix} = D U_{new}$$
+
+$$U = \begin{bmatrix} d_1 & u_{12} & u_{13} \\ 0 & d_2 & u_{23} \\ 0 & 0 & d_3 \end{bmatrix} = \begin{bmatrix} d_1 & 0 & 0 \\ 0 & d_2 & 0 \\ 0 & 0 & d_3 \end{bmatrix} \begin{bmatrix} 1 & u_{12}/d_1 & u_{13}/d_1 \\ 0 & 1 & u_{23}/d_2 \\ 0 & 0 & 1 \end{bmatrix} = D U_{new}$$
+
     Substituting this back yields the symmetric **$LDU$ factorization**:
-    $$A = LDU$$
+
+$$A = LDU$$
 
 ---
 
@@ -63,13 +78,18 @@ $$A = \begin{bmatrix} 2 & 4 & 2 \\ 4 & 11 & 1 \\ 2 & 1 & 15 \end{bmatrix}$$
 ### Step 1: Row Elimination to find $U$
 *   **Eliminate $A_{21}$**: The first pivot is $d_1 = 2$. Multiplier $l_{21} = \frac{4}{2} = 2$.
     Subtract $2$ times Row 1 from Row 2 ($R_2 \leftarrow R_2 - 2R_1$):
-    $$\begin{bmatrix} 2 & 4 & 2 \\ 0 & 3 & -3 \\ 2 & 1 & 15 \end{bmatrix}$$
+
+$$\begin{bmatrix} 2 & 4 & 2 \\ 0 & 3 & -3 \\ 2 & 1 & 15 \end{bmatrix}$$
+
 *   **Eliminate $A_{31}$**: Multiplier $l_{31} = \frac{2}{2} = 1$.
     Subtract Row 1 from Row 3 ($R_3 \leftarrow R_3 - R_1$):
-    $$\begin{bmatrix} 2 & 4 & 2 \\ 0 & 3 & -3 \\ 0 & -3 & 13 \end{bmatrix}$$
+
+$$\begin{bmatrix} 2 & 4 & 2 \\ 0 & 3 & -3 \\ 0 & -3 & 13 \end{bmatrix}$$
+
 *   **Eliminate $A_{32}$**: The second pivot is $d_2 = 3$. Multiplier $l_{32} = \frac{-3}{3} = -1$.
     Subtract $-1$ times Row 2 from Row 3 ($R_3 \leftarrow R_3 + R_2$):
-    $$\begin{bmatrix} 2 & 4 & 2 \\ 0 & 3 & -3 \\ 0 & 0 & 10 \end{bmatrix} = U$$
+
+$$\begin{bmatrix} 2 & 4 & 2 \\ 0 & 3 & -3 \\ 0 & 0 & 10 \end{bmatrix} = U$$
 
 Our upper triangular matrix $U$ has pivots **$2$, $3$, and $10$** on the diagonal.
 
@@ -97,7 +117,8 @@ This yields the normalized upper triangular matrix:
 $$U_{new} = \begin{bmatrix} 1 & 2 & 1 \\ 0 & 1 & -1 \\ 0 & 0 & 1 \end{bmatrix}$$
 
 *   *Note the Symmetry:* Because the original matrix $A$ was symmetric ($A^T = A$), our $LDU$ factorization exhibits beautiful mathematical symmetry: **$U_{new}$ is the exact transpose of $L$** ($U_{new} = L^T$).
-    $$A = L D L^T = \begin{bmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ 1 & -1 & 1 \end{bmatrix} \begin{bmatrix} 2 & 0 & 0 \\ 0 & 3 & 0 \\ 0 & 0 & 10 \end{bmatrix} \begin{bmatrix} 1 & 2 & 1 \\ 0 & 1 & -1 \\ 0 & 0 & 1 \end{bmatrix}$$
+
+$$A = L D L^T = \begin{bmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ 1 & -1 & 1 \end{bmatrix} \begin{bmatrix} 2 & 0 & 0 \\ 0 & 3 & 0 \\ 0 & 0 & 10 \end{bmatrix} \begin{bmatrix} 1 & 2 & 1 \\ 0 & 1 & -1 \\ 0 & 0 & 1 \end{bmatrix}$$
 
 ---
 

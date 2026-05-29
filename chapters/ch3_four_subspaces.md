@@ -43,9 +43,12 @@ Gilbert Strang's formulation of the fundamental theorem is divided into two part
 *   **Part II (Orthogonal Complements)**: 
     The subspaces are orthogonal complements in their respective spaces:
     *   In $\mathbb{R}^n$, the nullspace is the orthogonal complement of the row space:
-        $$N(A) = C(A^T)^\perp \implies V = C(A^T) \oplus N(A)$$
+
+$$N(A) = C(A^T)^\perp \implies V = C(A^T) \oplus N(A)$$
+
     *   In $\mathbb{R}^m$, the left nullspace is the orthogonal complement of the column space:
-        $$N(A^T) = C(A)^\perp \implies W = C(A) \oplus N(A^T)$$
+
+$$N(A^T) = C(A)^\perp \implies W = C(A) \oplus N(A^T)$$
 
 ---
 
@@ -91,11 +94,16 @@ $$A = \begin{bmatrix} 1 & 2 & 0 & 1 \\ 2 & 4 & 1 & 4 \\ 1 & 2 & 1 & 3 \end{bmatr
 We apply Gaussian row elimination to find the pivot columns:
 
 1.  Subtract $2$ times Row 1 from Row 2 ($R_2 \leftarrow R_2 - 2R_1$):
-    $$\begin{bmatrix} 1 & 2 & 0 & 1 \\ 0 & 0 & 1 & 2 \\ 1 & 2 & 1 & 3 \end{bmatrix}$$
+
+$$\begin{bmatrix} 1 & 2 & 0 & 1 \\ 0 & 0 & 1 & 2 \\ 1 & 2 & 1 & 3 \end{bmatrix}$$
+
 2.  Subtract Row 1 from Row 3 ($R_3 \leftarrow R_3 - R_1$):
-    $$\begin{bmatrix} 1 & 2 & 0 & 1 \\ 0 & 0 & 1 & 2 \\ 0 & 0 & 1 & 2 \end{bmatrix}$$
+
+$$\begin{bmatrix} 1 & 2 & 0 & 1 \\ 0 & 0 & 1 & 2 \\ 0 & 0 & 1 & 2 \end{bmatrix}$$
+
 3.  Subtract Row 2 from Row 3 ($R_3 \leftarrow R_3 - R_2$):
-    $$R = \begin{bmatrix} 1 & 2 & 0 & 1 \\ 0 & 0 & 1 & 2 \\ 0 & 0 & 0 & 0 \end{bmatrix}$$
+
+$$R = \begin{bmatrix} 1 & 2 & 0 & 1 \\ 0 & 0 & 1 & 2 \\ 0 & 0 & 0 & 0 \end{bmatrix}$$
 
 *   **Pivots**: The pivots are in Column 1 and Column 3.
 *   **Rank**: The number of non-zero rows is $r = 2$.
@@ -146,16 +154,21 @@ $$\left[ \begin{array}{cccc|ccc} 1 & 2 & 0 & 1 & 1 & 0 & 0 \\ 2 & 4 & 1 & 4 & 0 
 1.  Row operations:
     *   $R_2 \leftarrow R_2 - 2R_1$
     *   $R_3 \leftarrow R_3 - R_1$
-    $$\left[ \begin{array}{cccc|ccc} 1 & 2 & 0 & 1 & 1 & 0 & 0 \\ 0 & 0 & 1 & 2 & -2 & 1 & 0 \\ 0 & 0 & 1 & 2 & -1 & 0 & 1 \end{array} \right]$$
+
+$$\left[ \begin{array}{cccc|ccc} 1 & 2 & 0 & 1 & 1 & 0 & 0 \\ 0 & 0 & 1 & 2 & -2 & 1 & 0 \\ 0 & 0 & 1 & 2 & -1 & 0 & 1 \end{array} \right]$$
+
 2.  Subtract Row 2 from Row 3 ($R_3 \leftarrow R_3 - R_2$):
-    $$\left[ \begin{array}{cccc|ccc} 1 & 2 & 0 & 1 & 1 & 0 & 0 \\ 0 & 0 & 1 & 2 & -2 & 1 & 0 \\ 0 & 0 & 0 & 0 & 1 & -1 & 1 \end{array} \right]$$
+
+$$\left[ \begin{array}{cccc|ccc} 1 & 2 & 0 & 1 & 1 & 0 & 0 \\ 0 & 0 & 1 & 2 & -2 & 1 & 0 \\ 0 & 0 & 0 & 0 & 1 & -1 & 1 \end{array} \right]$$
 
 The row in the right-hand identity matrix corresponding to the zero row in $R$ represents the vector in the left nullspace:
 
 $$\text{Basis of } N(A^T) = \left\{ \begin{bmatrix} 1 \\ -1 \\ 1 \end{bmatrix} \right\}$$
 
 *   **Verification**: Check $A^T y = \mathbf{0}$:
-    $$1\begin{bmatrix} 1 \\ 2 \\ 1 \end{bmatrix} - 1\begin{bmatrix} 2 \\ 4 \\ 2 \end{bmatrix} + 1\begin{bmatrix} 1 & 2 & 1 \end{bmatrix}^T = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}$$
+
+$$1\begin{bmatrix} 1 \\ 2 \\ 1 \end{bmatrix} - 1\begin{bmatrix} 2 \\ 4 \\ 2 \end{bmatrix} + 1\begin{bmatrix} 1 & 2 & 1 \end{bmatrix}^T = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}$$
+
 *   **Dimension**: $\dim N(A^T) = m - r = 3 - 2 = 1$.
 
 ---
@@ -172,5 +185,7 @@ Let $A$ be a $T \times n$ matrix representing the historical returns of $n$ dist
 In multi-factor quantitative risk models, let $A$ be an $m \times n$ exposure matrix, where $A_{ij}$ is the exposure of asset $j$ to systemic risk factor $i$ (e.g., beta to growth, momentum, or value).
 
 *   A portfolio allocation vector $x \in \mathbb{R}^n$ represents a **factor-hedged portfolio** if and only if it lies in the **Nullspace $N(A)$**:
-    $$Ax = \mathbf{0}$$
+
+$$Ax = \mathbf{0}$$
+
 *   Every vector $x$ in the nullspace represents a market-neutral portfolio with **absolute zero net exposure** to all $m$ systemic risk factors. Finding the basis of $N(A)$ allows risk managers to construct arbitrage portfolios that are completely insulated from macroeconomic factor movements.

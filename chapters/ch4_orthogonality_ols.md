@@ -18,9 +18,12 @@ By utilizing the **Gram-Schmidt process**, we can transform the columns of $A$ i
 ### 1. Orthogonality of the Subspaces
 The four fundamental subspaces are perpendicular in pairs:
 *   **In $\mathbb{R}^n$**: The row space is the orthogonal complement of the nullspace:
-    $$C(A^T) = N(A)^\perp \quad \text{and} \quad C(A^T) \perp N(A)$$
+
+$$C(A^T) = N(A)^\perp \quad \text{and} \quad C(A^T) \perp N(A)$$
+
 *   **In $\mathbb{R}^m$**: The column space is the orthogonal complement of the left nullspace:
-    $$C(A) = N(A^T)^\perp \quad \text{and} \quad C(A) \perp N(A^T)$$
+
+$$C(A) = N(A^T)^\perp \quad \text{and} \quad C(A) \perp N(A^T)$$
 
 ---
 
@@ -33,9 +36,12 @@ $$H = A(A^T A)^{-1} A^T$$
     1.  **Symmetric**: $H^T = H$
     2.  **Idempotent**: $H^2 = H$ (projecting a projected vector does not change its position)
     3.  **Trace**: The trace (sum of diagonal entries) of the projection matrix equals the rank of the matrix $A$, which represents the dimension of the subspace we are projecting onto:
-        $$\text{tr}(H) = \text{rank}(A) = n \quad (\text{for a full column-rank matrix } A)$$
+
+$$\text{tr}(H) = \text{rank}(A) = n \quad (\text{for a full column-rank matrix } A)$$
+
     4.  **Complement Projection**: The matrix $I - H$ projects onto the left nullspace $N(A^T)$:
-        $$\mathbf{e} = (I - H)b$$
+
+$$\mathbf{e} = (I - H)b$$
 
 ---
 
@@ -43,11 +49,16 @@ $$H = A(A^T A)^{-1} A^T$$
 When $Ax = b$ has no solution, we seek $\hat{x}$ that minimizes the squared Euclidean norm of the error vector $\|\mathbf{e}\|^2 = \|b - Ax\|^2$.
 
 1.  The error vector $\mathbf{e}$ must be orthogonal to every column of $A$:
-    $$\mathbf{a}_i^T (b - A\hat{x}) = 0 \quad \text{for all } i$$
+
+$$\mathbf{a}_i^T (b - A\hat{x}) = 0 \quad \text{for all } i$$
+
 2.  In matrix form, this means the error vector must lie in the left nullspace $N(A^T)$:
-    $$A^T (b - A\hat{x}) = \mathbf{0}$$
+
+$$A^T (b - A\hat{x}) = \mathbf{0}$$
+
 3.  Expanding this yields the **Normal Equation**:
-    $$A^T A \hat{x} = A^T b \implies \hat{x} = (A^T A)^{-1} A^T b$$
+
+$$A^T A \hat{x} = A^T b \implies \hat{x} = (A^T A)^{-1} A^T b$$
 
 ---
 
@@ -55,11 +66,16 @@ When $Ax = b$ has no solution, we seek $\hat{x}$ that minimizes the squared Eucl
 Let $\mathbf{a}, \mathbf{b}, \mathbf{c}$ be three linearly independent vectors. We transform them into an orthonormal basis $\mathbf{q}_1, \mathbf{q}_2, \mathbf{q}_3$ using Gram-Schmidt:
 
 1.  **First Vector**: Choose $\mathbf{a}$ as the base direction, and normalize it:
-    $$\mathbf{A} = \mathbf{a} \implies \mathbf{q}_1 = \frac{\mathbf{A}}{\|\mathbf{A}\|}$$
+
+$$\mathbf{A} = \mathbf{a} \implies \mathbf{q}_1 = \frac{\mathbf{A}}{\|\mathbf{A}\|}$$
+
 2.  **Second Vector**: Subtract the projection of $\mathbf{b}$ along $\mathbf{q}_1$ from $\mathbf{b}$ to get the perpendicular component $\mathbf{B}$:
-    $$\mathbf{B} = \mathbf{b} - (\mathbf{b}^T \mathbf{q}_1) \mathbf{q}_1 \implies \mathbf{q}_2 = \frac{\mathbf{B}}{\|\mathbf{B}\|}$$
+
+$$\mathbf{B} = \mathbf{b} - (\mathbf{b}^T \mathbf{q}_1) \mathbf{q}_1 \implies \mathbf{q}_2 = \frac{\mathbf{B}}{\|\mathbf{B}\|}$$
+
 3.  **Third Vector**: Subtract the projections of $\mathbf{c}$ along both $\mathbf{q}_1$ and $\mathbf{q}_2$ from $\mathbf{c}$ to get the perpendicular component $\mathbf{C}$:
-    $$\mathbf{C} = \mathbf{c} - (\mathbf{c}^T \mathbf{q}_1) \mathbf{q}_1 - (\mathbf{c}^T \mathbf{q}_2) \mathbf{q}_2 \implies \mathbf{q}_3 = \frac{\mathbf{C}}{\|\mathbf{C}\|}$$
+
+$$\mathbf{C} = \mathbf{c} - (\mathbf{c}^T \mathbf{q}_1) \mathbf{q}_1 - (\mathbf{c}^T \mathbf{q}_2) \mathbf{q}_2 \implies \mathbf{q}_3 = \frac{\mathbf{C}}{\|\mathbf{C}\|}$$
 
 This Gram-Schmidt orthogonalization is compiled algebraically into the **$A = QR$ decomposition**, where $Q$ contains the orthonormal columns $\mathbf{q}_i$, and $R$ is an upper triangular matrix of coefficients:
 
@@ -89,9 +105,12 @@ $$\begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{bmatrix} \begin{bmatrix} C \\ D \
 
 ### Step 2: Compute the Normal Equation Components
 1.  Compute $A^T A$:
-    $$A^T A = \begin{bmatrix} 1 & 1 & 1 \\ 0 & 1 & 2 \end{bmatrix} \begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{bmatrix} = \begin{bmatrix} 3 & 3 \\ 3 & 5 \end{bmatrix}$$
+
+$$A^T A = \begin{bmatrix} 1 & 1 & 1 \\ 0 & 1 & 2 \end{bmatrix} \begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{bmatrix} = \begin{bmatrix} 3 & 3 \\ 3 & 5 \end{bmatrix}$$
+
 2.  Compute $A^T b$:
-    $$A^T b = \begin{bmatrix} 1 & 1 & 1 \\ 0 & 1 & 2 \end{bmatrix} \begin{bmatrix} 6 \\ 0 \\ 0 \end{bmatrix} = \begin{bmatrix} 6 \\ 0 \end{bmatrix}$$
+
+$$A^T b = \begin{bmatrix} 1 & 1 & 1 \\ 0 & 1 & 2 \end{bmatrix} \begin{bmatrix} 6 \\ 0 \\ 0 \end{bmatrix} = \begin{bmatrix} 6 \\ 0 \end{bmatrix}$$
 
 ---
 
@@ -102,11 +121,16 @@ $$\begin{bmatrix} 3 & 3 \\ 3 & 5 \end{bmatrix} \begin{bmatrix} \hat{C} \\ \hat{D
 
 Using elimination:
 1.  Subtract Row 1 from Row 2 ($R_2 \leftarrow R_2 - R_1$):
-    $$\begin{bmatrix} 3 & 3 \\ 0 & 2 \end{bmatrix} \begin{bmatrix} \hat{C} \\ \hat{D} \end{bmatrix} = \begin{bmatrix} 6 \\ -6 \end{bmatrix}$$
+
+$$\begin{bmatrix} 3 & 3 \\ 0 & 2 \end{bmatrix} \begin{bmatrix} \hat{C} \\ \hat{D} \end{bmatrix} = \begin{bmatrix} 6 \\ -6 \end{bmatrix}$$
+
 2.  Solve for $\hat{D}$:
-    $$2\hat{D} = -6 \implies \hat{D} = -3$$
+
+$$2\hat{D} = -6 \implies \hat{D} = -3$$
+
 3.  Solve for $\hat{C}$ via back substitution:
-    $$3\hat{C} + 3(-3) = 6 \implies 3\hat{C} - 9 = 6 \implies 3\hat{C} = 15 \implies \hat{C} = 5$$
+
+$$3\hat{C} + 3(-3) = 6 \implies 3\hat{C} - 9 = 6 \implies 3\hat{C} = 15 \implies \hat{C} = 5$$
 
 ---
 
@@ -134,5 +158,7 @@ To secure numerical stability in production algorithmic trading engines, we neve
 
 1.  Decompose $A = QR$. Since $Q$ is orthogonal, it preserves Euclidean lengths and does not amplify numerical errors.
 2.  Substitute into the OLS formulation:
-    $$R \hat{x} = Q^T b$$
+
+$$R \hat{x} = Q^T b$$
+
 3.  Because $R$ is upper triangular, we solve for $\hat{x}$ cleanly using **back substitution** without any matrix inversion. This bypasses the inversion bottleneck, guarantees numerical stability, and protects the system from multicollinearity float truncation.
